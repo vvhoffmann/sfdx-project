@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Auteczko__c</fullName>
+    <fullName>AuteczkoID__c</fullName>
+    <businessStatus>Active</businessStatus>
     <externalId>false</externalId>
-    <label>Auteczko</label>
+    <label>AuteczkoID</label>
     <referenceTo>Auteczko__c</referenceTo>
     <relationshipLabel>Wheels</relationshipLabel>
     <relationshipName>Wheels</relationshipName>
     <relationshipOrder>0</relationshipOrder>
-    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <reparentableMasterDetail>true</reparentableMasterDetail>
+    <securityClassification>Public</securityClassification>
     <trackTrending>false</trackTrending>
     <type>MasterDetail</type>
     <writeRequiresMasterRead>false</writeRequiresMasterRead>
