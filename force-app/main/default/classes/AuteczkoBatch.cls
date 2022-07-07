@@ -1,29 +1,34 @@
-global class AuteczkoBatch implements Database.Batchable<sObject>, Database.Stateful {
-    public Integer recordsProcessed = 0;
+global class AuteczkoBatch implements Database.Batchable<Auteczko__c> {
+    private Integer recordsProcessed = 0;
     
-    global Database.QueryLocator start(Database.BatchableContext BC) {
-        // collect the batches of records or objects to be passed to execute         
-        String query = 'SELECT Name FROM Auteczko_Model__c limit 10'  ;         
-        return Database.getQueryLocator(query);       
+    global Iterable<Auteczko__c> start(Database.BatchableContext BC) {
+        return new AuteczkoIterable(20);    
     }
     
-    global void execute(Database.BatchableContext BC, List<Auteczko_Model__c> scope) {
-        List<Auteczko__c> autList = new List<Auteczko__c>();
-        // process each batch of records
-        for(Auteczko_Model__c model:scope){
-              for (integer i=0;i<25;i++)
-              {
-                    Auteczko__c anew= new Auteczko__c(Auteczko_Model__c=model.Name);
-                    autList.add(anew);
-              }
-        }
+    global void execute(Database.BatchableContext BC, List<Auteczko__c> scope) {
+        List<Wheel__c> wheelList = new List<Wheel__c>();
         try {
-            insert autList;
+            insert scope;
         } 
         catch(Exception e) {
             System.debug(e);
         }
-         
+        for(Auteczko__c anew:scope){
+            Wheel__c wheel1=new Wheel__c(AuteczkoID__c=anew.Name,Position_Front_Back__c=true);
+            Wheel__c wheel2=new Wheel__c(AuteczkoID__c=anew.Name);
+            Wheel__c wheel3=new Wheel__c(AuteczkoID__c=anew.Name,Position_Right_Left__c=true, Position_Front_Back__c=true);
+            Wheel__c wheel4=new Wheel__c(AuteczkoID__c=anew.Name,Position_Right_Left__c=true);
+            wheelList.add(wheel1);
+            wheelList.add(wheel2);
+            wheelList.add(wheel3);
+            wheelList.add(wheel4);
+        }
+        try{
+            insert wheelList;
+        }
+        catch(Exception e) {
+            System.debug(e);
+        }
     }        
 
     public void finish(Database.BatchableContext bc){

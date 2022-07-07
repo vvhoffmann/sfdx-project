@@ -55,5 +55,13 @@
     <members>Support</members>
     <name>Profile</name>
   </types>
+  <types>
+    <members>Auteczko_Majster</members>
+    <name>Profile</name>
+  </types>
+  <types>
+    <members>Auteczko_Obserwator</members>
+    <name>Profile</name>
+  </types>
   <version>51.0</version>
 </Package>
