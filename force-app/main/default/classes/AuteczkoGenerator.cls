@@ -4,17 +4,17 @@ global class AuteczkoGenerator implements Iterator<Auteczko__c> {
     
 	global AuteczkoGenerator(List<Auteczko__c> autslist) {
   		counter = 0;
-        auts=autslist;
+        auts = autslist;
 	}
     global boolean hasNext() {
-    	return counter<auts.size()-1;
+    	return counter < auts.size()-1;
 	}
 	global Auteczko__c next() {
-        if(hasNext()){
+        if (hasNext()){
             counter++;
     		return auts[counter];
         }
-        else{
+        else {
             throw new NoSuchElementException();
         }
   		
