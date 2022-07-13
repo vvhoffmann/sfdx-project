@@ -1,0 +1,60 @@
+@isTest
+public class TriggerHandlerTest {
+    @isTest static void TriggerHandlerTwoWheelsTest() {
+        Auteczko_Model__c model=new Auteczko_Model__c(Name='Mustang' , Serial_Number__c='CRS654');
+        insert model;
+        Auteczko__c auto=new Auteczko__c(Auteczko_Model__c = model.Id);
+        insert auto;
+        List<Wheel__c> wheels=new List<Wheel__c>();
+        Wheel__c wheel1=new Wheel__c(AuteczkoID__c = auto.Id);
+        wheels.add(wheel1);
+        Wheel__c wheel2=new Wheel__c(AuteczkoID__c = auto.Id, Position_Front_Back__c = true);
+        wheels.add(wheel2);
+        
+        Test.startTest();
+        Database.SaveResult[] result = Database.insert(wheels);
+        Test.stopTest();
+
+        System.assert(result[0].isSuccess());
+        System.assert(result[0].getErrors().size() == 0);
+        System.assert(result[1].isSuccess());
+        System.assert(result[1].getErrors().size() == 0);
+    }
+    
+    @isTest static void TriggerHandlerNoErrorTest() {
+        Auteczko_Model__c model = new Auteczko_Model__c(Name='Mustang', Serial_Number__c='CRS654');
+        insert model;
+        Auteczko__c auto = new Auteczko__c(Auteczko_Model__c= model.Id);
+        insert auto;
+        Wheel__c wheel1 = new Wheel__c(AuteczkoID__c=auto.Id);
+        insert wheel1;
+        Wheel__c wheel2 = new Wheel__c(AuteczkoID__c=auto.Id, Position_Front_Back__c=true);
+        Test.startTest();
+        Database.SaveResult result = Database.insert(wheel2);
+        Test.stopTest();
+        // Verify 
+        // In this case the deletion should have been stopped by the trigger,
+        // so verify that we got back an error.
+        System.assert(result.isSuccess());
+        System.assert(result.getErrors().size() == 0);
+    }
+    
+    @isTest static void TriggerHandlerErrorTest() {
+        Auteczko_Model__c model=new Auteczko_Model__c(Name = 'Mustang' , Serial_Number__c = 'CRS654');
+        insert model;
+        Auteczko__c auto=new Auteczko__c(Auteczko_Model__c = model.Id);
+        insert auto;
+        Wheel__c wheel1=new Wheel__c(AuteczkoID__c = auto.Id);
+        insert wheel1;
+        Wheel__c wheel2=new Wheel__c(AuteczkoID__c = auto.Id);
+        Test.startTest();
+        Database.SaveResult result = Database.insert(wheel2, false);
+        Test.stopTest();
+        // Verify 
+        // In this case the deletion should have been stopped by the trigger,
+        // so verify that we got back an error.
+        System.assert(!result.isSuccess());
+        System.assert(result.getErrors().size() > 0);
+        System.assertEquals('To auteczko ma już przypisaną oponę na tym miejscu!' , result.getErrors()[0].getMessage());
+    }
+}

@@ -1,0 +1,29 @@
+@isTest
+public class AuteczkoBatchTest {
+    @isTest static void AuteczkoBatchTest1() {
+        Auteczko_Model__c model=new Auteczko_Model__c(Name = 'Mustang' , Serial_Number__c = 'CRS654');
+        insert model;
+        for(Integer i=0;i<20;++i){
+            Auteczko__c anew=new Auteczko__c(Auteczko_Model__c = model.Id);
+        	insert anew;
+            
+            List<Wheel__c> wheelList = new List<Wheel__c>();
+            Wheel__c wheel1 = new Wheel__c(AuteczkoID__c = anew.Id,Position_Front_Back__c = true);
+            Wheel__c wheel2 = new Wheel__c(AuteczkoID__c = anew.Id);
+            Wheel__c wheel3 = new Wheel__c(AuteczkoID__c = anew.Id , Position_Right_Left__c = true , Position_Front_Back__c = true);
+            Wheel__c wheel4 = new Wheel__c(AuteczkoID__c = anew.Id , Position_Right_Left__c = true);
+            wheelList.add(wheel1);
+            wheelList.add(wheel2);
+            wheelList.add(wheel3);
+            wheelList.add(wheel4);
+            insert(wheellist);
+        }
+       
+        Test.startTest();
+        AuteczkoBatch c = new AuteczkoBatch(20);
+        Database.executeBatch(c);
+        Test.stopTest();
+        System.debug(c);
+		
+    }
+}
